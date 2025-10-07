@@ -1,0 +1,3 @@
+atlassian_python_api==4.0.7
+python-dotenv==1.1.1
+Requests==2.32.5
