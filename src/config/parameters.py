@@ -1,4 +1,4 @@
-from dotenv import load_dotenv #pip install python-dotenv
+from dotenv import load_dotenv
 import os
 
 from src.config import jira_api
