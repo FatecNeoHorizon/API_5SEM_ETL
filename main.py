@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
 from src.config import parameters
+from src.extract import extract_projetos
+from src.load import load_projetos
 from atlassian import Jira
 import requests
 
@@ -14,8 +16,8 @@ def main():
     print(f'JIRA_USERNAME: {parameters.JIRA_USERNAME}')
     print(f'JIRA_PASSWORD: {parameters.JIRA_PASSWORD}')
 
-    data = parameters.JIRA_SESSION.get_all_projects()
-    print(data)
+    projetos = extract_projetos.extrair_todos_projetos()
+    load_projetos.carregar_projetos(projetos)
 
 if __name__ == "__main__":
     main()
