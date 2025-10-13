@@ -13,7 +13,6 @@ def get_periodos_filter(dia,semana,mes,ano):
 
     if response.status_code in (200,201):
         resposta = response.json()
-        print(f"Resposta Filtro {resposta}")
         return resposta
     else:
         print(f"Erro ao chamar endpoint {url}: {response.status_code}, {response.content}")

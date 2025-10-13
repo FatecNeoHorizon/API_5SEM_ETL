@@ -11,7 +11,7 @@ def extrair_todos_projetos():
             back_projeto = dict(
                 nome = jira_projeto['name'],
                 key = jira_projeto['key'],
-                jira_id = jira_projeto['id']  )
+                projeto_jira_id = jira_projeto['id']  )
             
             back_projetos.append(back_projeto)
 
