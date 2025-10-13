@@ -4,6 +4,7 @@ from src.extract import extract_projetos
 from src.extract import extract_atividades
 from src.extract import extract_periodos
 from src.load import load_projetos
+from src.load import load_periodos
 
 def main():
     """main."""
@@ -25,6 +26,7 @@ def main():
     #           carregar_devs(devs)
 
     periodos = extract_periodos.extract_periodos(atividades)
+    load_periodos.carregar_periodos(periodos)
 
 if __name__ == "__main__":
     main()
