@@ -11,7 +11,7 @@ def extrair_todos_tipos(atividades):
 
             back_tipo = dict(
             nome = issue_type['name'],
-            descicao = issue_type['description'],
+            descricao = issue_type['description'],
             tipoJiraId = issue_type['id']  )
 
             back_tipos.append(back_tipo)

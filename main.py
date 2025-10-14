@@ -6,6 +6,7 @@ from src.extract import extract_periodos
 from src.extract import extract_tipos
 from src.load import load_projetos
 from src.load import load_periodos
+from src.load import load_tipos
 
 def main():
     """main."""
@@ -30,5 +31,7 @@ def main():
     load_periodos.carregar_periodos(periodos)
 
     tipos = extract_tipos.extrair_todos_tipos(atividades)
+    load_tipos.carregar_tipos(tipos)
+
 if __name__ == "__main__":
     main()
