@@ -3,6 +3,7 @@ from src.config import parameters
 from src.extract import extract_projetos
 from src.extract import extract_atividades
 from src.extract import extract_periodos
+from src.extract import extract_tipos
 from src.load import load_projetos
 from src.load import load_periodos
 
@@ -28,5 +29,6 @@ def main():
     periodos = extract_periodos.extract_periodos(atividades)
     load_periodos.carregar_periodos(periodos)
 
+    tipos = extract_tipos.extrair_todos_tipos(atividades)
 if __name__ == "__main__":
     main()
