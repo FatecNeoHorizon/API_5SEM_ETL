@@ -8,6 +8,7 @@ from src.extract import extract_status
 from src.load import load_projetos
 from src.load import load_periodos
 from src.load import load_tipos
+from src.load import load_status
 
 def main():
     """main."""
@@ -35,6 +36,7 @@ def main():
     load_tipos.carregar_tipos(tipos)
 
     status_array = extract_status.extrair_todos_status(atividades)
+    load_status.carregar_status(status_array)
 
 if __name__ == "__main__":
     main()
