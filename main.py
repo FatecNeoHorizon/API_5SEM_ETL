@@ -4,6 +4,7 @@ from src.extract import extract_projetos
 from src.extract import extract_atividades
 from src.extract import extract_periodos
 from src.extract import extract_tipos
+from src.extract import extract_status
 from src.load import load_projetos
 from src.load import load_periodos
 from src.load import load_tipos
@@ -32,6 +33,8 @@ def main():
 
     tipos = extract_tipos.extrair_todos_tipos(atividades)
     load_tipos.carregar_tipos(tipos)
+
+    status_array = extract_status.extrair_todos_status(atividades)
 
 if __name__ == "__main__":
     main()
