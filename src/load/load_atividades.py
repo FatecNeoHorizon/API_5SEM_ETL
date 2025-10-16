@@ -3,10 +3,10 @@ from src.config import parameters
 
 def carregar_atividades(atividades):
     for atividade in atividades:
-        inserir_uma_atividade(atividade)
+        inserir_atividade(atividade)
 
     
-def inserir_uma_atividade(atividade):
+def inserir_atividade(atividade):
     url = f"{parameters.BACK_BASE_URL}/dim-atividade"
     response = requests.post(url, json = atividade)
 
