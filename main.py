@@ -16,13 +16,13 @@ def main():
     print(f'JIRA_USERNAME: {parameters.JIRA_USERNAME}')
     print(f'JIRA_PASSWORD: {parameters.JIRA_PASSWORD}')
 
-    projetos = extract_projetos.extrair_projetos()
+    projetos = extract_projetos.extrair_todos_projetos()
     load_projetos.carregar_projetos(projetos)
 
     atividades = extract_atividades.extrair_atividades(projetos)
     load_atividades.carregar_atividades(atividades)
 
-    periodos = extract_periodos.extract_periodos(atividades)
+    periodos = extract_periodos.extrair_periodos(atividades)
     load_periodos.carregar_periodos(periodos)
 
     #Para os métodos de extração / carga das próximas dimensões,
