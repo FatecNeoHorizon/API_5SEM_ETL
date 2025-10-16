@@ -2,12 +2,12 @@ from src.config import parameters
 import datetime
 from dateutil import parser
 
-def extrair_periodos(atividades):
+def extrair_periodos(jira_issues):
     periodos = []
 
     try:
-        for atividade in atividades:
-            worklogs = atividade["fields"]["worklog"]["worklogs"]
+        for jira_issue in jira_issues:
+            worklogs = jira_issue["fields"]["worklog"]["worklogs"]
 
             if len(worklogs) > 0:
                 started_datetime = worklogs[0]["started"]
