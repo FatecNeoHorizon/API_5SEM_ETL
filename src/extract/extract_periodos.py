@@ -16,8 +16,8 @@ def extract_periodos(atividades):
         return periodos
         
     except Exception as e:
-        print(e)
-        return[]
+        print(f"Erro ao extrair períodos: {e}")
+        return []
 
 def convert_datetime_to_periodo(str_datetime):
     # Exemplo de str_datetime: "2025-10-02T16:00:00.000-0300"
