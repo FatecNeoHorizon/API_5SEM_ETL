@@ -2,7 +2,7 @@ from src.config import parameters
 import datetime
 from dateutil import parser
 
-def extract_periodos(atividades):
+def extrair_periodos(atividades):
     periodos = []
 
     try:
