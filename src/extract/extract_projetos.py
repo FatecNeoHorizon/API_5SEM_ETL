@@ -18,5 +18,5 @@ def extrair_todos_projetos():
         return back_projetos
 
     except Exception as e:
-        print(e)
-        return[]
+        print(f"Erro ao extrair projetos: {e}")
+        return []
