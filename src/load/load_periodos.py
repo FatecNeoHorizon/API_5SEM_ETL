@@ -21,7 +21,7 @@ def carregar_periodos(periodos_array):
 
 def inserir_um_periodo(periodo, timeout: int = parameters.REQUEST_TIMEOUT):
     url = f"{parameters.BACK_BASE_URL}/dim-periodo"
-    resposta = post_json(url, periodo, timeout=parameters.REQUEST_TIMEOUT, expect_id=True)
+    resposta = post_json(url, periodo, timeout=timeout, expect_id=True)
     if not resposta:
         return
 

@@ -12,7 +12,7 @@ def carregar_projetos(projetos_array):
 
 def inserir_um_projeto(projeto, timeout: int = parameters.REQUEST_TIMEOUT):
     url = f"{parameters.BACK_BASE_URL}/dim-projeto"
-    resposta = post_json(url, projeto, timeout=parameters.REQUEST_TIMEOUT, expect_id=True)
+    resposta = post_json(url, projeto, timeout=timeout, expect_id=True)
     if not resposta:
         return
 

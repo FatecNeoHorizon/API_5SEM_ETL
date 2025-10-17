@@ -12,7 +12,7 @@ def carregar_atividades(atividades):
 
 def inserir_atividade(atividade, timeout: int = parameters.REQUEST_TIMEOUT):
     url = f"{parameters.BACK_BASE_URL}/dim-atividade"
-    resposta = post_json(url, atividade, timeout=parameters.REQUEST_TIMEOUT, expect_id=True)
+    resposta = post_json(url, atividade, timeout=timeout, expect_id=True)
     if not resposta:
         return
 
