@@ -1,12 +1,14 @@
 from dotenv import load_dotenv
 from src.config import parameters
 from src.extract import extract_projetos
+from src.extract import extract_jira_issues
 from src.extract import extract_atividades
 from src.extract import extract_periodos
 from src.extract import extract_tipos
 from src.extract import extract_status
 from src.load import load_projetos
 from src.load import load_periodos
+from src.load import load_atividades
 from src.load import load_tipos
 from src.load import load_status
 
@@ -22,18 +24,21 @@ def main():
     projetos = extract_projetos.extrair_todos_projetos()
     load_projetos.carregar_projetos(projetos)
 
-    atividades = extract_atividades.extract_atividades(projetos)
+    jira_issues = extract_jira_issues.extrair_jira_issues(projetos)
+
+    atividades = extract_atividades.extrair_atividades(jira_issues)
+    load_atividades.carregar_atividades(atividades)
+
+    periodos = extract_periodos.extrair_periodos(jira_issues)
+    load_periodos.carregar_periodos(periodos)
+
+    tipos = extract_tipos.extrair_todos_tipos(jira_issues)
+    load_tipos.carregar_tipos(tipos)
 
     #Para os métodos de extração / carga das próximas dimensões,
     #Basta criar um método passando a variável 'atividades' como parâmetro
     #Exemplo:   devs = extract_devs(atividades) 
     #           carregar_devs(devs)
-
-    periodos = extract_periodos.extract_periodos(atividades)
-    load_periodos.carregar_periodos(periodos)
-
-    tipos = extract_tipos.extrair_todos_tipos(atividades)
-    load_tipos.carregar_tipos(tipos)
 
     status_array = extract_status.extrair_todos_status(atividades)
     load_status.carregar_status(status_array)
