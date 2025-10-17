@@ -1,12 +1,15 @@
 from src.config import parameters
+import logging
 
-def extrair_todos_status(atividades):
+logger = logging.getLogger(__name__)
+
+def extrair_todos_status(jira_issues):
     back_status_array = []
 
     try:
 
-        for atividade in atividades:
-            status_category = atividade["fields"]["statusCategory"]
+        for jira_issue in jira_issues:
+            status_category = jira_issue["fields"]["statusCategory"]
 
             back_status = dict(
             nome = status_category['name'],
@@ -17,5 +20,5 @@ def extrair_todos_status(atividades):
         return back_status_array
         
     except Exception as e:
-        print(e)
+        logger.warning("Erro ao extrair status: %s", e)
         return[]

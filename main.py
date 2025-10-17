@@ -35,12 +35,7 @@ def main():
     tipos = extract_tipos.extrair_todos_tipos(jira_issues)
     load_tipos.carregar_tipos(tipos)
 
-    #Para os métodos de extração / carga das próximas dimensões,
-    #Basta criar um método passando a variável 'atividades' como parâmetro
-    #Exemplo:   devs = extract_devs(atividades) 
-    #           carregar_devs(devs)
-
-    status_array = extract_status.extrair_todos_status(atividades)
+    status_array = extract_status.extrair_todos_status(jira_issues)
     load_status.carregar_status(status_array)
 
 if __name__ == "__main__":
