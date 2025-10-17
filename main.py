@@ -4,9 +4,11 @@ from src.extract import extract_projetos
 from src.extract import extract_jira_issues
 from src.extract import extract_atividades
 from src.extract import extract_periodos
+from src.extract import extract_tipos
 from src.load import load_projetos
 from src.load import load_periodos
 from src.load import load_atividades
+from src.load import load_tipos
 
 def main():
     """main."""
@@ -28,12 +30,13 @@ def main():
     periodos = extract_periodos.extrair_periodos(jira_issues)
     load_periodos.carregar_periodos(periodos)
 
+    tipos = extract_tipos.extrair_todos_tipos(jira_issues)
+    load_tipos.carregar_tipos(tipos)
+
     #Para os métodos de extração / carga das próximas dimensões,
     #Basta criar um método passando a variável 'atividades' como parâmetro
     #Exemplo:   devs = extract_devs(atividades) 
     #           carregar_devs(devs)
-
-    
 
 if __name__ == "__main__":
     main()
