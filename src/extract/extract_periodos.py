@@ -20,10 +20,8 @@ def extrair_periodos(jira_issues):
         return []
 
 def convert_datetime_to_periodo(str_datetime):
-    # Exemplo de str_datetime: "2025-10-02T16:00:00.000-0300"
     parsed_datetime = parser.parse(str_datetime)
-
-    num_semana = parsed_datetime.isocalendar().week
+    num_semana = parsed_datetime.isocalendar()[1]
 
     periodo = dict(
         dia = parsed_datetime.day,
