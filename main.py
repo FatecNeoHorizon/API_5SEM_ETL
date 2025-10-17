@@ -1,10 +1,12 @@
 from dotenv import load_dotenv
 from src.config import parameters
 from src.extract import extract_projetos
+from src.extract import extract_jira_issues
 from src.extract import extract_atividades
 from src.extract import extract_periodos
 from src.load import load_projetos
 from src.load import load_periodos
+from src.load import load_atividades
 
 def main():
     """main."""
@@ -18,15 +20,20 @@ def main():
     projetos = extract_projetos.extrair_todos_projetos()
     load_projetos.carregar_projetos(projetos)
 
-    atividades = extract_atividades.extract_atividades(projetos)
+    jira_issues = extract_jira_issues.extrair_jira_issues(projetos)
+
+    atividades = extract_atividades.extrair_atividades(jira_issues)
+    load_atividades.carregar_atividades(atividades)
+
+    periodos = extract_periodos.extrair_periodos(jira_issues)
+    load_periodos.carregar_periodos(periodos)
 
     #Para os métodos de extração / carga das próximas dimensões,
     #Basta criar um método passando a variável 'atividades' como parâmetro
     #Exemplo:   devs = extract_devs(atividades) 
     #           carregar_devs(devs)
 
-    periodos = extract_periodos.extract_periodos(atividades)
-    load_periodos.carregar_periodos(periodos)
+    
 
 if __name__ == "__main__":
     main()
