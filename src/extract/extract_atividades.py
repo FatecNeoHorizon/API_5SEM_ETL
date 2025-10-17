@@ -1,22 +1,32 @@
 from src.config import parameters
+import logging
 
+logger = logging.getLogger(__name__)
 
-def extract_atividades(projetos):
+def extrair_atividades(jira_issues):
     atividades = []
 
     try:
+        
+        for issue in jira_issues:
+            fields = issue.get('fields', {})
 
-        for projeto in projetos:
+            status = fields.get('status', {}).get('name', '').lower()
+            ativo = status != 'concluído'
 
-            projeto_nome = projeto['nome']
-            JQL = f'project="{projeto_nome}"'
-            data = parameters.JIRA_SESSION.enhanced_jql(JQL)
+            nome = fields.get('summary') or "Atividade sem Título"
+            descricao = fields.get('description') or "Descrição não fornecida"
 
-            atividades += data['issues']
+            atividade = {
+                "nome": nome,
+                "descricao": descricao,
+                "atividade_jira_id": issue.get('id'),
+                "ativo": ativo
+            }
 
-        return atividades
+            atividades.append(atividade)
+
     except Exception as e:
-        print(e)
-        return[]
-
-    
+        logger.warning("Erro ao extrair atividades: %s", e)
+        return []
+    return atividades
