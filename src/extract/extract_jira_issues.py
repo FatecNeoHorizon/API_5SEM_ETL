@@ -1,4 +1,7 @@
 from src.config import parameters
+import logging
+
+logger = logging.getLogger(__name__)
 
 def extrair_jira_issues(projetos):
     atividades = []
@@ -12,6 +15,6 @@ def extrair_jira_issues(projetos):
             atividades += data['issues']
 
     except Exception as e:
-        print(f"Erro ao extrair JIRA Isuues: {e}")
+        logger.error("Erro ao extrair JIRA Issues: %s", e)
         return []
-    return atividades 
+    return atividades

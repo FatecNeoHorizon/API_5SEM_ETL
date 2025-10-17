@@ -1,4 +1,7 @@
+import logging
 from src.config import parameters
+
+logger = logging.getLogger(__name__)
 
 
 def extrair_todos_projetos():
@@ -9,7 +12,7 @@ def extrair_todos_projetos():
         for jira_projeto in jira_projetos:
             projeto_id = jira_projeto.get('id')
             if not projeto_id:
-                print(f"Projeto Jira sem 'id' encontrado: {jira_projeto}. Pulando...")
+                logger.error("Projeto Jira sem 'id' encontrado: %s. Pulando...", jira_projeto)
                 continue
 
             back_projeto = dict(
@@ -17,11 +20,10 @@ def extrair_todos_projetos():
                 key = jira_projeto.get('key'),
                 projeto_jira_id = projeto_id,
             )
-
             back_projetos.append(back_projeto)
 
         return back_projetos
 
     except Exception as e:
-        print(f"Erro ao extrair projetos: {e}")
+        logger.error("Erro ao extrair projetos: %s", e)
         return []

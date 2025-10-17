@@ -1,6 +1,9 @@
 from src.config import parameters
 import datetime
 from dateutil import parser
+import logging
+
+logger = logging.getLogger(__name__)
 
 def extrair_periodos(jira_issues):
     periodos = []
@@ -16,7 +19,7 @@ def extrair_periodos(jira_issues):
         return periodos
         
     except Exception as e:
-        print(f"Erro ao extrair períodos: {e}")
+        logger.warning("Erro ao extrair períodos: %s", e)
         return []
 
 def convert_datetime_to_periodo(str_datetime):
