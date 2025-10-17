@@ -1,13 +1,16 @@
 from src.config import parameters
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-def extrair_todos_tipos(atividades):
+def extrair_todos_tipos(jira_issues):
     back_tipos = []
 
     try:
 
-        for atividade in atividades:
-            issue_type = atividade["fields"]["issuetype"]
+        for jira_issue in jira_issues:
+            issue_type = jira_issue["fields"]["issuetype"]
 
             back_tipo = dict(
             nome = issue_type['name'],
@@ -19,5 +22,5 @@ def extrair_todos_tipos(atividades):
         return back_tipos
         
     except Exception as e:
-        print(e)
+        logger.warning("Erro ao extrair períodos: %s", e)
         return[]

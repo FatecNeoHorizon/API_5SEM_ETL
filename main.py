@@ -30,18 +30,13 @@ def main():
     periodos = extract_periodos.extrair_periodos(jira_issues)
     load_periodos.carregar_periodos(periodos)
 
+    tipos = extract_tipos.extrair_todos_tipos(jira_issues)
+    load_tipos.carregar_tipos(tipos)
+
     #Para os métodos de extração / carga das próximas dimensões,
     #Basta criar um método passando a variável 'atividades' como parâmetro
     #Exemplo:   devs = extract_devs(atividades) 
     #           carregar_devs(devs)
-
-    
-
-    tipos = extract_tipos.extrair_todos_tipos(atividades)
-    load_tipos.carregar_tipos(tipos)
-
-    tipos = extract_tipos.extrair_todos_tipos(atividades)
-    load_tipos.carregar_tipos(tipos)
 
 if __name__ == "__main__":
     main()
