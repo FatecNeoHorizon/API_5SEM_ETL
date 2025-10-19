@@ -4,12 +4,14 @@ from src.utils.get_periodos_filter import get_periodos_filter
 
 logger = logging.getLogger(__name__)
 
-def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_array):
+def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_array, tipos):
 
     fato_atividade_array = []
     atividade = None
     projeto = None
     periodo = None
+    status = None
+    tipo = None
 
     flag = True
 
@@ -52,6 +54,11 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
                 status = retornar_dim_status(status_array, statusJiraId)
                 if not status:
                     logger.warning("Erro ao extrair fato_atividade: Status não encontrado")
+
+                tipoJiraId = jira_issue["fields"]["issuetype"]["id"]
+                tipo = retornar_dim_tipo(tipos, tipoJiraId)
+                if not tipo:
+                    logger.warning("Erro ao extrair fato_atividade: Tipo não encontrado")
                 
                 flag = False
 
@@ -62,10 +69,8 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
             projeto = projeto,
             periodo = periodo,
             status = status,
-            tipo_id = 1,
-            atividade_quantidade_numeric = 1,
-            nome = status_category['name'],
-            statusJiraId = status_category['id']  )
+            tipo = tipo,
+            quantidade = 1  )
 
             fato_atividade_array.append(fato_atividade)
 
@@ -99,4 +104,10 @@ def retornar_dim_status(status_array, statusJiraId):
     for status in status_array:
         if status['statusJiraId'] == statusJiraId:
             return status
+    return None
+
+def retornar_dim_tipo(tipos, tipoJiraId):
+    for tipo in tipos:
+        if tipo['tipoJiraId'] == tipoJiraId:
+            return tipo
     return None
