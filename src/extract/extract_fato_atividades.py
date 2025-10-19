@@ -4,7 +4,7 @@ from src.utils.get_periodos_filter import get_periodos_filter
 
 logger = logging.getLogger(__name__)
 
-def extrair_todos_fatos_atividades(jira_issues, atividades, projetos):
+def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_array):
 
     fato_atividade_array = []
     atividade = None
@@ -48,7 +48,10 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos):
                 if not periodo:
                     logger.warning("Erro ao extrair fato_atividade: Período não encontrado")
 
-                
+                statusJiraId = jira_issue["fields"]["statusCategory"]["id"]
+                status = retornar_dim_status(status_array, statusJiraId)
+                if not status:
+                    logger.warning("Erro ao extrair fato_atividade: Status não encontrado")
                 
                 flag = False
 
@@ -58,7 +61,7 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos):
             atividade = atividade,
             projeto = projeto,
             periodo = periodo,
-            status_id = 1,
+            status = status,
             tipo_id = 1,
             atividade_quantidade_numeric = 1,
             nome = status_category['name'],
@@ -90,4 +93,10 @@ def retornar_dim_periodo(filtro_periodo):
     if len(banco_periodos) > 0:
         return banco_periodos[0]
     
+    return None
+
+def retornar_dim_status(status_array, statusJiraId):
+    for status in status_array:
+        if status['statusJiraId'] == statusJiraId:
+            return status
     return None

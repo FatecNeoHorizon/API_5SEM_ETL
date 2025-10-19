@@ -39,7 +39,7 @@ def main():
     status_array = extract_status.extrair_todos_status(jira_issues)
     load_status.carregar_status(status_array)
 
-    fato_atividade_array = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues,atividades, projetos)
+    fato_atividade_array = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues,atividades, projetos, status_array)
     print(fato_atividade_array[0])
 
 if __name__ == "__main__":
