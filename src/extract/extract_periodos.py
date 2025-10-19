@@ -1,7 +1,5 @@
-from src.config import parameters
-import datetime
-from dateutil import parser
 import logging
+from src.utils.convert_datetime_to_periodo import convert_datetime_to_periodo
 
 logger = logging.getLogger(__name__)
 
@@ -21,16 +19,3 @@ def extrair_periodos(jira_issues):
     except Exception as e:
         logger.warning("Erro ao extrair períodos: %s", e)
         return []
-
-def convert_datetime_to_periodo(str_datetime):
-    parsed_datetime = parser.parse(str_datetime)
-    num_semana = parsed_datetime.isocalendar()[1]
-
-    periodo = dict(
-        dia = parsed_datetime.day,
-        semana = num_semana,
-        mes = parsed_datetime.month,
-        ano = parsed_datetime.year
-    )
-
-    return periodo
