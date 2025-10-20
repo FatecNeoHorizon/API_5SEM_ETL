@@ -18,7 +18,6 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
     try:
 
         for jira_issue in jira_issues:
-            status_category = jira_issue["fields"]["statusCategory"]
 
             if flag:
 
@@ -45,7 +44,6 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
                     mes = 12,
                     ano = 99 )
 
-                print(f"Filtro Periodo: {filtro_periodo}")
                 periodo = retornar_dim_periodo(filtro_periodo)
                 if not periodo:
                     logger.warning("Erro ao extrair fato_atividade: Período não encontrado")
@@ -64,15 +62,15 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
 
 
 
-            fato_atividade = dict(
-            atividade = atividade,
-            projeto = projeto,
-            periodo = periodo,
-            status = status,
-            tipo = tipo,
-            quantidade = 1  )
+                fato_atividade = dict(
+                dimAtividade = atividade,
+                dimProjeto = projeto,
+                dimPeriodo = periodo,
+                dimStatus = status,
+                dimTipo = tipo,
+                quantidade = 1.00  )
 
-            fato_atividade_array.append(fato_atividade)
+                fato_atividade_array.append(fato_atividade)
 
         return fato_atividade_array
         
