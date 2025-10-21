@@ -6,73 +6,78 @@ logger = logging.getLogger(__name__)
 
 def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_array, tipos):
 
-    fato_atividade_array = []
+    fato_atividade_dict = dict()
     atividade = None
     projeto = None
     periodo = None
     status = None
     tipo = None
 
-    flag = True
+    pk_sequence_array = []
+    qtd_final = dict()
 
     try:
 
         for jira_issue in jira_issues:
 
-            if flag:
+        
 
-                atividade_jira_id = jira_issue["id"]
-                atividade = retornar_dim_atividade(atividades,atividade_jira_id)
-                if not atividade:
-                    logger.warning("Erro ao extrair fato_atividade: Atividade não encontrada")
-                
+            atividade_jira_id = jira_issue["id"]
+            atividade = retornar_dim_atividade(atividades,atividade_jira_id)
+            if not atividade:
+                logger.warning("Erro ao extrair fato_atividade: Atividade não encontrada")
+            
 
-                projeto_jira_id = jira_issue["fields"]["project"]["id"]
-                projeto = retornar_dim_projeto(projetos, projeto_jira_id)
-                if not projeto:
-                    logger.warning("Erro ao extrair fato_atividade: Projeto não encontrada")
+            projeto_jira_id = jira_issue["fields"]["project"]["id"]
+            projeto = retornar_dim_projeto(projetos, projeto_jira_id)
+            if not projeto:
+                logger.warning("Erro ao extrair fato_atividade: Projeto não encontrada")
 
-                worklogs = jira_issue["fields"]["worklog"]["worklogs"]
-                filtro_periodo = None
-                if len(worklogs) > 0:
-                    started_datetime = worklogs[0]["started"]
-                    filtro_periodo = convert_datetime_to_periodo(started_datetime)
-                else:
-                    filtro_periodo = dict(
-                    dia = 31,
-                    semana = 99,
-                    mes = 12,
-                    ano = 99 )
+            worklogs = jira_issue["fields"]["worklog"]["worklogs"]
+            filtro_periodo = None
+            if len(worklogs) > 0:
+                started_datetime = worklogs[0]["started"]
+                filtro_periodo = convert_datetime_to_periodo(started_datetime)
+            else:
+                filtro_periodo = dict(
+                dia = 31,
+                semana = 99,
+                mes = 12,
+                ano = 99 )
 
-                periodo = retornar_dim_periodo(filtro_periodo)
-                if not periodo:
-                    logger.warning("Erro ao extrair fato_atividade: Período não encontrado")
+            periodo = retornar_dim_periodo(filtro_periodo)
+            if not periodo:
+                logger.warning("Erro ao extrair fato_atividade: Período não encontrado")
 
-                statusJiraId = jira_issue["fields"]["statusCategory"]["id"]
-                status = retornar_dim_status(status_array, statusJiraId)
-                if not status:
-                    logger.warning("Erro ao extrair fato_atividade: Status não encontrado")
+            statusJiraId = jira_issue["fields"]["statusCategory"]["id"]
+            status = retornar_dim_status(status_array, statusJiraId)
+            if not status:
+                logger.warning("Erro ao extrair fato_atividade: Status não encontrado")
 
-                tipoJiraId = jira_issue["fields"]["issuetype"]["id"]
-                tipo = retornar_dim_tipo(tipos, tipoJiraId)
-                if not tipo:
-                    logger.warning("Erro ao extrair fato_atividade: Tipo não encontrado")
-                
-                flag = False
+            tipoJiraId = jira_issue["fields"]["issuetype"]["id"]
+            tipo = retornar_dim_tipo(tipos, tipoJiraId)
+            if not tipo:
+                logger.warning("Erro ao extrair fato_atividade: Tipo não encontrado")
 
+            pk_sequence_current = f"{atividade['id']}-{projeto['id']}-{periodo['id']}-{status['id']}-{tipo['id']}"
 
+            if pk_sequence_current in pk_sequence_array:
+                qtd_final[pk_sequence_current] += 1
+            else:
+                qtd_final[pk_sequence_current] = 1
+                pk_sequence_array.append(pk_sequence_current)
 
-                fato_atividade = dict(
-                dimAtividade = atividade,
-                dimProjeto = projeto,
-                dimPeriodo = periodo,
-                dimStatus = status,
-                dimTipo = tipo,
-                quantidade = 1.00  )
+            fato_atividade = dict(
+            dimAtividade = atividade,
+            dimProjeto = projeto,
+            dimPeriodo = periodo,
+            dimStatus = status,
+            dimTipo = tipo,
+            quantidade = qtd_final[pk_sequence_current]  )
 
-                fato_atividade_array.append(fato_atividade)
+            fato_atividade_dict[pk_sequence_current] = fato_atividade
 
-        return fato_atividade_array
+        return fato_atividade_dict
         
     except Exception as e:
         logger.warning("Erro ao fato_atividade: %s", e)

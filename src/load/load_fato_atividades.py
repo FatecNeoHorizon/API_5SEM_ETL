@@ -4,11 +4,11 @@ from src.utils.http_client import post_json
 
 logger = logging.getLogger(__name__)
 
-def carregar_fato_atividades(fato_atividade_array):
+def carregar_fato_atividades(fato_atividade_dict):
 
     try:
-        for fato_atividade in fato_atividade_array:
-                inserir_um_fato_atividade(fato_atividade)
+        for key in fato_atividade_dict: 
+            inserir_um_fato_atividade(fato_atividade_dict[key])
 
     except Exception as e:
         logger.warning("Erro ao carregar fato_atividades: %s", e)

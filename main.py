@@ -12,6 +12,7 @@ from src.load import load_periodos
 from src.load import load_atividades
 from src.load import load_tipos
 from src.load import load_status
+from src.load import load_fato_atividades
 
 def main():
     """main."""
@@ -42,8 +43,7 @@ def main():
     status_array = extract_status.extrair_todos_status(jira_issues)
     load_status.carregar_status(status_array)
 
-    fato_atividade_array = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues,atividades, projetos, status_array, tipos)
-    print(fato_atividade_array[0])
+    fato_atividade_dict = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues,atividades, projetos, status_array, tipos)
 
 if __name__ == "__main__":
     main()
