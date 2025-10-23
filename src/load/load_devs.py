@@ -10,7 +10,7 @@ def carregar_devs(devs_array):
     for dev in devs_array:
         dev_nome_atual = dev["nome"]
         if dev_nome_atual not in dev_nome_array:
-            inserir_dev(dev)  # dev pode ter só "nome"
+            inserir_dev(dev) 
             dev_nome_array.append(dev_nome_atual)
         else:
             logger.info("Desenvolvedor - %s já cadastrado", dev.get('nome'))
@@ -18,10 +18,9 @@ def carregar_devs(devs_array):
 def inserir_dev(dev, timeout: int = parameters.REQUEST_TIMEOUT):
     url = f"{parameters.BACK_BASE_URL}/dim-dev"
 
-    # Cria o campo aqui no ETL: se não vier, envia 0
     payload = {
         "nome": dev.get("nome"),
-        "custoHora": dev.get("custoHora", 10)  # default no ETL
+        "custoHora": dev.get("custoHora", 10) 
     }
 
     if not payload["nome"]:
@@ -37,7 +36,6 @@ def inserir_dev(dev, timeout: int = parameters.REQUEST_TIMEOUT):
         logger.error("Resposta do backend para criar dev não contém 'id'. Resposta: %s", resposta)
         return
 
-    # opcional: refletir no objeto original
     dev['id'] = resp_id
     dev.setdefault('custoHora', payload['custoHora'])
 
