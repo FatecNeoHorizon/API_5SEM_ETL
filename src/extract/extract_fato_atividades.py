@@ -4,9 +4,8 @@ from src.utils import retorno_dimensoes
 
 logger = logging.getLogger(__name__)
 
-def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_array, tipos):
+def extrair_todos_fatos_atividades(jira_issues, projetos, status_array, tipos):
 
-    global atividade
     global projeto
     global periodo
     global status
@@ -20,9 +19,9 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
 
         for jira_issue in jira_issues:
 
-            extrair_dimensoes(jira_issue, atividades, projetos, status_array, tipos)
+            extrair_dimensoes(jira_issue, projetos, status_array, tipos)
 
-            pk_sequence_current = f"{atividade['id']}-{projeto['id']}-{periodo['id']}-{status['id']}-{tipo['id']}"
+            pk_sequence_current = f"{projeto['id']}-{periodo['id']}-{status['id']}-{tipo['id']}"
 
             if pk_sequence_current in pk_sequence_array:
                 qtd_final[pk_sequence_current] += 1
@@ -31,7 +30,6 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
                 pk_sequence_array.append(pk_sequence_current)
 
             fato_atividade = dict(
-            dimAtividade = atividade,
             dimProjeto = projeto,
             dimPeriodo = periodo,
             dimStatus = status,
@@ -47,14 +45,7 @@ def extrair_todos_fatos_atividades(jira_issues, atividades, projetos, status_arr
         return[]
     
 
-def extrair_dimensoes(jira_issue, atividades, projetos, status_array, tipos):
-
-    #Extrair Atividade
-    global atividade
-    atividade_jira_id = jira_issue["id"]
-    atividade = retorno_dimensoes.retornar_dim_atividade(atividades,atividade_jira_id)
-    if not atividade:
-        logger.warning("Erro ao extrair fato_atividade: Atividade não encontrada")
+def extrair_dimensoes(jira_issue, projetos, status_array, tipos):
     
     #Extrair Projeto
     global projeto
