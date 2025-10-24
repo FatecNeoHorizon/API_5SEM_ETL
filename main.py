@@ -1,5 +1,5 @@
-from dotenv import load_dotenv
 from src.config import parameters
+from src.utils.inserir_periodo_coringa import inserir_periodo_coringa
 from src.extract import extract_projetos
 from src.extract import extract_jira_issues
 from src.extract import extract_atividades
@@ -7,12 +7,14 @@ from src.extract import extract_periodos
 from src.extract import extract_tipos
 from src.extract import extract_status
 from src.extract import extract_devs
+from src.extract import extract_fato_atividades
 from src.load import load_projetos
 from src.load import load_periodos
 from src.load import load_atividades
 from src.load import load_tipos
 from src.load import load_devs
 from src.load import load_status
+from src.load import load_fato_atividades
 
 def main():
     """main."""
@@ -22,6 +24,9 @@ def main():
     print(f'JIRA_BASE_URL: {parameters.JIRA_BASE_URL}')
     print(f'JIRA_USERNAME: {parameters.JIRA_USERNAME}')
     print(f'JIRA_PASSWORD: {parameters.JIRA_PASSWORD}')
+    print(f'BACK_BASE_URL: {parameters.BACK_BASE_URL}')
+
+    inserir_periodo_coringa()
 
     projetos = extract_projetos.extrair_todos_projetos()
     load_projetos.carregar_projetos(projetos)
@@ -43,10 +48,8 @@ def main():
     status_array = extract_status.extrair_todos_status(jira_issues)
     load_status.carregar_status(status_array)
 
-    #Para os métodos de extração / carga das próximas dimensões,
-    #Basta criar um método passando a variável 'atividades' como parâmetro
-    #Exemplo:   devs = extract_devs(atividades) 
-    #           carregar_devs(devs)
+    fato_atividade_dict = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues, projetos, status_array, tipos)
+    load_fato_atividades.carregar_fato_atividades(fato_atividade_dict)
 
 if __name__ == "__main__":
     main()
