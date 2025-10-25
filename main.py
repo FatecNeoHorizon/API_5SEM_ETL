@@ -16,6 +16,7 @@ from src.load import load_tipos
 from src.load import load_devs
 from src.load import load_status
 from src.load import load_fato_atividades
+from src.load import load_fato_apontamento_horas
 
 def main():
     """main."""
@@ -53,11 +54,7 @@ def main():
     load_fato_atividades.carregar_fato_atividades(fato_atividade_dict)
 
     fato_apontamento_horas_dict = extract_fato_apontamento_horas.extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, devs)
-    i = 0
-    for key in fato_apontamento_horas_dict:
-        if i < 2:
-            print(fato_apontamento_horas_dict[key])
-            i += 1
+    load_fato_apontamento_horas.carregar_fato_apontamento_horas(fato_apontamento_horas_dict)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 from src.utils.convert_datetime_to_periodo import convert_datetime_to_periodo
 from src.utils import retorno_dimensoes
@@ -24,13 +25,19 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
 
             extrair_dimensoes(jira_issue, atividades, projetos, devs)
 
-            data_atualização = jira_issue["fields"]["updated"]
-            data_criacao = jira_issue["fields"]["created"]
+            jira_data_atualizacao = jira_issue["fields"]["updated"]
+            jira_data_criacao = jira_issue["fields"]["created"]
+
             descricao_trabalho = jira_issue["fields"]["description"]
             horas_trabalhadas = jira_issue["fields"]["timespent"]
+            data_atualizacao = converter_jira_datetime_para_back(jira_data_atualizacao)
+            data_criacao = converter_jira_datetime_para_back(jira_data_criacao)
 
             if not horas_trabalhadas:
-                horas_trabalhadas = 0
+                horas_trabalhadas = 1
+
+            if not descricao_trabalho:
+                descricao_trabalho = 'Descrição não fornecida'
 
             pk_sequence_current = f"{atividade['id']}-{projeto['id']}-{periodo['id']}-{dev['id']}"
 
@@ -39,7 +46,7 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
             dimProjeto = projeto,
             dimPeriodo = periodo,
             dimDev = dev,
-            dataAtualizacao = data_atualização,
+            dataAtualizacao = data_atualizacao,
             dataCriacao = data_criacao,
             descricaoTrabalho = descricao_trabalho,
             horasTrabalhadas = horas_trabalhadas  )
@@ -103,4 +110,8 @@ def extrair_dimensoes(jira_issue, atividades, projetos, devs):
     if not periodo:
         logger.warning("Erro ao extrair fato_apontamento_horas: Período não encontrado")
 
-    
+def converter_jira_datetime_para_back(jira_horas_trabalhadas):
+    aux_horas_trabalhadas = jira_horas_trabalhadas.split('.')[0]
+    aux_datetime = datetime.strptime(aux_horas_trabalhadas, '%Y-%m-%dT%H:%M:%S')
+    back_horas_trabalhadas = aux_datetime.strftime("%d-%m-%Y %H:%M:%S")
+    return back_horas_trabalhadas
