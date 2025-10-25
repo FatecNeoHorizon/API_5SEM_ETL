@@ -23,7 +23,10 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
 
         for jira_issue in jira_issues:
 
-            extrair_dimensoes(jira_issue, atividades, projetos, devs)
+            flag = extrair_dimensoes(jira_issue, atividades, projetos, devs)
+
+            if not flag:
+                continue
 
             jira_data_atualizacao = jira_issue["fields"]["updated"]
             jira_data_criacao = jira_issue["fields"]["created"]
@@ -78,17 +81,13 @@ def extrair_dimensoes(jira_issue, atividades, projetos, devs):
 
     #Extrair Dev
     global dev
-    # assignee = jira_issue["fields"]["assignee"]
-    # if not assignee or not jira_issue.get("displayName"):
-    #     return False
+    assignee = jira_issue["fields"]["assignee"]
 
-    # displayName = assignee['displayName']
-   
-    # dev = retorno_dimensoes.retornar_dim_dev(devs, displayName)
-    dev = dict(
-        id = 1,
-        nome = "Eric Lourenço Mendes da SIlva"
-    )
+    if not assignee:
+        return False
+
+    displayName = assignee['displayName']
+    dev = retorno_dimensoes.retornar_dim_dev(devs, displayName)
     if not dev:
         logger.warning("Erro ao extrair fato_apontamento_horas: Dev não encontrado")
 
@@ -109,6 +108,8 @@ def extrair_dimensoes(jira_issue, atividades, projetos, devs):
     periodo = retorno_dimensoes.retornar_dim_periodo(filtro_periodo)
     if not periodo:
         logger.warning("Erro ao extrair fato_apontamento_horas: Período não encontrado")
+
+    return True
 
 def converter_jira_datetime_para_back(jira_horas_trabalhadas):
     aux_horas_trabalhadas = jira_horas_trabalhadas.split('.')[0]
