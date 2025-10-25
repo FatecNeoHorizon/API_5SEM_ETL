@@ -37,7 +37,7 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
             data_criacao = converter_jira_datetime_para_back(jira_data_criacao)
 
             if not segundos_trabalhados:
-                horas_trabalhadas = 0.1
+                horas_trabalhadas = 0.0
             else:
                 horas_trabalhadas = converter_segundos_horas(segundos_trabalhados)
 
@@ -116,7 +116,7 @@ def extrair_dimensoes(jira_issue, atividades, projetos, devs):
 def converter_jira_datetime_para_back(jira_horas_trabalhadas):
     aux_horas_trabalhadas = jira_horas_trabalhadas.split('.')[0]
     aux_datetime = datetime.strptime(aux_horas_trabalhadas, '%Y-%m-%dT%H:%M:%S')
-    back_horas_trabalhadas = aux_datetime.strftime("%d-%m-%Y %H:%M:%S")
+    back_horas_trabalhadas = aux_datetime.strftime("%Y-%m-%dT%H:%M:%S.%f")
     return back_horas_trabalhadas
 
 def converter_segundos_horas(segundos):
