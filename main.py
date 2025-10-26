@@ -15,6 +15,8 @@ from src.load import load_tipos
 from src.load import load_devs
 from src.load import load_status
 from src.load import load_fato_atividades
+from src.extract import extract_fato_custo_hora
+from src.load import load_fato_custo_hora
 
 def main():
     """main."""
@@ -50,6 +52,9 @@ def main():
 
     fato_atividade_dict = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues, projetos, status_array, tipos)
     load_fato_atividades.carregar_fato_atividades(fato_atividade_dict)
+
+    fatos_custo = extract_fato_custo_hora.extrair_todos_fatos_custo_hora(jira_issues, projetos, devs)
+    load_fato_custo_hora.carregar_fato_custo_hora(fatos_custo)
 
 if __name__ == "__main__":
     main()
