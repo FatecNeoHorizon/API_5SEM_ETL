@@ -7,6 +7,12 @@ logger = logging.getLogger(__name__)
 
 def carregar_devs(devs_array):
     dev_nome_array = []
+    
+    sem_atribuicao = "Não atribuido"
+    if sem_atribuicao not in dev_nome_array:
+        inserir_dev({"nome": sem_atribuicao, "custoHora": 1})
+        dev_nome_array.append(sem_atribuicao)
+
     for dev in devs_array:
         dev_nome_atual = dev["nome"]
         if dev_nome_atual not in dev_nome_array:

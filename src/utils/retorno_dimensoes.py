@@ -13,6 +13,20 @@ def retornar_dim_projeto(projetos,projeto_jira_id):
             return projeto
     return None
 
+def retornar_dim_projeto_custo_hora(projetos, projetoJiraId):
+    alvo = str(projetoJiraId).strip()
+    vistos = set()
+    id_calc = 0
+    for p in projetos or []:
+        pid = str(p.get("projeto_jira_id") or p.get("key") or "").strip()
+        if not pid or pid in vistos:
+            continue
+        vistos.add(pid)
+        id_calc += 1
+        if pid == alvo:
+            return id_calc
+    return 0
+
 def retornar_dim_periodo(filtro_periodo):
     banco_periodos = get_periodos_filter(filtro_periodo['dia'], filtro_periodo['semana'], filtro_periodo['mes'], filtro_periodo['ano'])
     if len(banco_periodos) > 0:
@@ -31,6 +45,22 @@ def retornar_dim_tipo(tipos, tipoJiraId):
         if tipo['tipoJiraId'] == tipoJiraId:
             return tipo
     return None
+
+def retornar_dim_dev_custo_hora(devs, devJiraNome):
+    alvo = devJiraNome.strip().lower()
+    vistos, id_calc = set(), 1  
+    for dev in devs or []:
+        nome = (dev.get("nome") or "").strip()
+        if not nome:
+            continue
+        k = nome.lower()
+        if k in vistos:
+            continue
+        vistos.add(k)
+        id_calc += 1  
+        if k == alvo:
+            return id_calc
+    return 1
 
 def retornar_dim_dev(devs, displayName):
     for dev in devs:
