@@ -53,7 +53,7 @@ def main():
     fato_atividade_dict = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues, projetos, status_array, tipos)
     load_fato_atividades.carregar_fato_atividades(fato_atividade_dict)
 
-    fato_apontamento_horas_dict = extract_fato_apontamento_horas.extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, devs)
+    fato_apontamento_horas_dict = extract_fato_apontamento_horas.extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, devs, tipos)
     load_fato_apontamento_horas.carregar_fato_apontamento_horas(fato_apontamento_horas_dict)
 
 
