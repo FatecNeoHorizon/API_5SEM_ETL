@@ -31,3 +31,9 @@ def retornar_dim_tipo(tipos, tipoJiraId):
         if tipo['tipoJiraId'] == tipoJiraId:
             return tipo
     return None
+
+def retornar_dim_dev(devs, displayName):
+    for dev in devs:
+        if dev["nome"] == displayName:
+            return dev
+    return None

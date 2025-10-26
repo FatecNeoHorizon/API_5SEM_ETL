@@ -8,6 +8,7 @@ from src.extract import extract_tipos
 from src.extract import extract_status
 from src.extract import extract_devs
 from src.extract import extract_fato_atividades
+from src.extract import extract_fato_apontamento_horas
 from src.load import load_projetos
 from src.load import load_periodos
 from src.load import load_atividades
@@ -15,6 +16,7 @@ from src.load import load_tipos
 from src.load import load_devs
 from src.load import load_status
 from src.load import load_fato_atividades
+from src.load import load_fato_apontamento_horas
 
 def main():
     """main."""
@@ -50,6 +52,10 @@ def main():
 
     fato_atividade_dict = extract_fato_atividades.extrair_todos_fatos_atividades(jira_issues, projetos, status_array, tipos)
     load_fato_atividades.carregar_fato_atividades(fato_atividade_dict)
+
+    fato_apontamento_horas_dict = extract_fato_apontamento_horas.extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, devs)
+    load_fato_apontamento_horas.carregar_fato_apontamento_horas(fato_apontamento_horas_dict)
+
 
 if __name__ == "__main__":
     main()
