@@ -11,21 +11,17 @@ def extrair_todos_fatos_custo_hora(jira_issues, projetos, devs):
         for jira_issue in jira_issues:
             extrair_dimensoes(jira_issue, projetos, devs)
 
-            # if not projeto or not isinstance(projeto, dict) or 'id' not in projeto:
-            #     logger.warning("Projeto inválido na issue: %s", jira_issue.get("id"))
-            #     continue
-            # if not periodo or not isinstance(periodo, dict) or 'id' not in periodo:
-            #     logger.warning("Período inválido na issue: %s", jira_issue.get("id"))
-            #     continue
-            # if not isinstance(desenvolvedor, int):
-            #     logger.warning("Desenvolvedor inválido na issue: %s", jira_issue.get("id"))
-            #     continue
+            if projeto is None or periodo is None or 'id' not in periodo or not isinstance(desenvolvedor, int):
+                continue
 
-            pk = f"{projeto['id']}-{periodo['id']}-{desenvolvedor}"
-            print(pk)
+            projeto_id = int(projeto)
+            periodo_id = int(periodo["id"])
+            dev_id = int(desenvolvedor)
+
+            pk = f"{projeto_id}-{periodo_id}-{dev_id}"
 
             horas = _calcular_horas_issue(jira_issue)
-            custo = horas * _obter_custo_hora_por_id(devs, desenvolvedor)
+            custo = horas * _obter_custo_hora_por_id(devs, dev_id)
 
             if pk in pk_sequence_array:
                 qtd_final[pk]["horas"] += horas
@@ -34,28 +30,32 @@ def extrair_todos_fatos_custo_hora(jira_issues, projetos, devs):
                 qtd_final[pk] = {"horas": horas, "custo": custo}
                 pk_sequence_array.append(pk)
 
-            fato_atividade_dict[pk] = dict(
-                dimProjetoId=projeto["id"],
-                dimPeriodoId=periodo["id"],
-                dimDevId=desenvolvedor,
-                horasQuantidade=qtd_final[pk]["horas"],
-                custo=qtd_final[pk]["custo"]
-            )
+            fato_atividade_dict[pk] = {
+                "dimProjeto": {"id": projeto_id},
+                "dimPeriodo": {"id": periodo_id},
+                "dimDev": {"id": dev_id},
+                "horasQuantidade": qtd_final[pk]["horas"],
+                "custo": qtd_final[pk]["custo"]
+            }
         return fato_atividade_dict
     except Exception as e:
         logger.warning("Erro ao fato_custo_hora: %s", e)
         return []
     
 def extrair_dimensoes(jira_issue, projetos, devs):
+    
+    #Extrair projetos
     global projeto
     try:
-        projeto_jira_id = jira_issue["fields"]["project"]["id"]
-        projeto = retorno_dimensoes.retornar_dim_projeto(projetos, projeto_jira_id)
+        projeto_jira_id = str(jira_issue["fields"]["project"]["id"])
+        projeto = retorno_dimensoes.retornar_dim_projeto_custo_hora(projetos, projeto_jira_id)
         if not projeto:
             logger.warning("Projeto não encontrada")
     except Exception:
         projeto = None
         logger.warning("Falha ao obter projeto da issue")
+
+    #Extrair periodo
     global periodo
     try:
         worklogs = jira_issue["fields"]["worklog"]["worklogs"]
@@ -69,13 +69,15 @@ def extrair_dimensoes(jira_issue, projetos, devs):
     except Exception:
         periodo = None
         logger.warning("Falha ao obter período da issue")
+    
+    #extrair devs
     global desenvolvedor
     try:
         devJiraNome = jira_issue["fields"]["assignee"]["displayName"]
         if devJiraNome is None or str(devJiraNome).strip() == "":
             desenvolvedor = 1
         else:
-            desenvolvedor = retorno_dimensoes.retornar_dim_dev(devs, devJiraNome) or 1
+            desenvolvedor = retorno_dimensoes.retornar_dim_dev_custo_hora(devs, devJiraNome) or 1
     except Exception:
         desenvolvedor = 1
 
