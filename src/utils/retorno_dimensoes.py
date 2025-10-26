@@ -32,18 +32,24 @@ def retornar_dim_tipo(tipos, tipoJiraId):
             return tipo
     return None
 
-def retornar_dim_dev(devs, devJiraNome):
-    alvo = devJiraNome.strip().lower()
-    vistos, id_calc = set(), 1  
-    for dev in devs or []:
-        nome = (dev.get("nome") or "").strip()
-        if not nome:
-            continue
-        k = nome.lower()
-        if k in vistos:
-            continue
-        vistos.add(k)
-        id_calc += 1  
-        if k == alvo:
-            return id_calc
-    return 1
+# def retornar_dim_dev(devs, devJiraNome):
+#     alvo = devJiraNome.strip().lower()
+#     vistos, id_calc = set(), 1  
+#     for dev in devs or []:
+#         nome = (dev.get("nome") or "").strip()
+#         if not nome:
+#             continue
+#         k = nome.lower()
+#         if k in vistos:
+#             continue
+#         vistos.add(k)
+#         id_calc += 1  
+#         if k == alvo:
+#             return id_calc
+#     return 1
+
+def retornar_dim_dev(devs, displayName):
+    for dev in devs:
+        if dev["nome"] == displayName:
+            return dev
+    return None
