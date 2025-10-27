@@ -5,12 +5,13 @@ from src.utils import retorno_dimensoes
 
 logger = logging.getLogger(__name__)
 
-def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, devs):
+def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, devs, tipos):
 
     global atividade
     global projeto
     global periodo
     global dev
+    global tipo
     
     fato_apontamento_horas_dict = dict()
     # pk_sequence_array = []
@@ -23,7 +24,7 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
 
         for jira_issue in jira_issues:
 
-            flag = extrair_dimensoes(jira_issue, atividades, projetos, devs)
+            flag = extrair_dimensoes(jira_issue, atividades, projetos, devs, tipos)
 
             if not flag:
                 continue
@@ -44,13 +45,14 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
             if not descricao_trabalho:
                 descricao_trabalho = 'Descrição não fornecida'
 
-            pk_sequence_current = f"{atividade['id']}-{projeto['id']}-{periodo['id']}-{dev['id']}"
+            pk_sequence_current = f"{atividade['id']}-{projeto['id']}-{periodo['id']}-{dev['id']}-{tipo['id']}"
 
             fato_apontamento_horas = dict(
             dimAtividade = atividade,
             dimProjeto = projeto,
             dimPeriodo = periodo,
             dimDev = dev,
+            dimTipo = tipo,
             dataAtualizacao = data_atualizacao,
             dataCriacao = data_criacao,
             descricaoTrabalho = descricao_trabalho,
@@ -65,7 +67,7 @@ def extrair_todos_fatos_apontamento_horas(jira_issues, atividades, projetos, dev
         return[]
     
 
-def extrair_dimensoes(jira_issue, atividades, projetos, devs):
+def extrair_dimensoes(jira_issue, atividades, projetos, devs, tipos):
 
     #Extrair Atividade
     global atividade
@@ -73,7 +75,14 @@ def extrair_dimensoes(jira_issue, atividades, projetos, devs):
     atividade = retorno_dimensoes.retornar_dim_atividade(atividades,atividade_jira_id)
     if not atividade:
         logger.warning("Erro ao extrair fato_apontamento_horas: Atividade não encontrada")
-    
+        
+    #Extrair Tipo
+    global tipo
+    tipoJiraId = jira_issue["fields"]["issuetype"]["id"]
+    tipo = retorno_dimensoes.retornar_dim_tipo(tipos, tipoJiraId)
+    if not tipo:
+        logger.warning("Erro ao extrair fato_apontamento_horas: Tipo não encontrado")
+
     #Extrair Projeto
     global projeto
     projeto_jira_id = jira_issue["fields"]["project"]["id"]
