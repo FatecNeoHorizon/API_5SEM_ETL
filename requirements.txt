@@ -1,0 +1,5 @@
+atlassian_python_api==4.0.7
+pytest==8.4.2
+python-dotenv==1.1.1
+python_dateutil==2.9.0.post0
+Requests==2.32.5
