@@ -11,10 +11,10 @@ def extrair_todos_fatos_custo_hora(jira_issues, projetos, devs):
         for jira_issue in jira_issues:
             extrair_dimensoes(jira_issue, projetos, devs)
 
-            if projeto is None or periodo is None or 'id' not in periodo or not isinstance(desenvolvedor, int):
+            if projeto is None or 'id' not in projeto or periodo is None or 'id' not in periodo or not isinstance(desenvolvedor, int):
                 continue
 
-            projeto_id = int(projeto)
+            projeto_id = int(projeto["id"])
             periodo_id = int(periodo["id"])
             dev_id = int(desenvolvedor)
 
@@ -48,7 +48,7 @@ def extrair_dimensoes(jira_issue, projetos, devs):
     global projeto
     try:
         projeto_jira_id = str(jira_issue["fields"]["project"]["id"])
-        projeto = retorno_dimensoes.retornar_dim_projeto_custo_hora(projetos, projeto_jira_id)
+        projeto = retorno_dimensoes.retornar_dim_projeto(projetos,projeto_jira_id)
         if not projeto:
             logger.warning("Projeto não encontrada")
     except Exception:
