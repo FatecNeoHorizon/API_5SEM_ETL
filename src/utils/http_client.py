@@ -1,13 +1,17 @@
 import logging
 import requests
 from requests import RequestException
+from src.config import parameters
 
 logger = logging.getLogger(__name__)
 
 
 def post_json(url: str, payload: dict, timeout: int = 30, expect_id: bool = False):
     try:
-        resp = requests.post(url, json=payload, timeout=timeout)
+        headers = {
+            "Authorization": f"Bearer {parameters.BACK_TOKEN}",
+        }
+        resp = requests.post(url, json=payload, timeout=timeout, headers=headers)
         resp.raise_for_status()
         data = resp.json()
         if expect_id and data.get('id') is None:

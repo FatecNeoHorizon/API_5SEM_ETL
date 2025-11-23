@@ -9,7 +9,12 @@ def get_periodos_filter(dia,semana,mes,ano):
         "mes": mes,
         "ano": ano
     }
-    response = requests.get(url, params=params)
+
+    headers = {
+            "Authorization": f"Bearer {parameters.BACK_TOKEN}",
+        }
+
+    response = requests.get(url, params=params, headers=headers)
 
     if response.status_code in (200,201):
         resposta = response.json()
