@@ -1,20 +1,12 @@
 import requests
 from src.config import parameters
 
-def get_periodos_filter(dia,semana,mes,ano):
-    url = f"{parameters.BACK_BASE_URL}/dim-periodo/filter"
-    params = {
-        "dia": dia,
-        "semana": semana,
-        "mes": mes,
-        "ano": ano
-    }
-
+def retorno_devs():
+    url = f"{parameters.BACK_BASE_URL}/dim-dev"
     headers = {
             "Authorization": f"Bearer {parameters.BACK_TOKEN}",
         }
-
-    response = requests.get(url, params=params, headers=headers)
+    response = requests.get(url=url, headers=headers)
 
     if response.status_code in (200,201):
         resposta = response.json()

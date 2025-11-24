@@ -1,22 +1,22 @@
-import logging
 import requests
 from requests import RequestException
+import logging
 from src.config import parameters
 
 logger = logging.getLogger(__name__)
 
-
-def post_json(url: str, payload: dict, timeout: int = 30, expect_id: bool = False):
+def gerar_token():
     try:
-        headers = {
-            "Authorization": f"Bearer {parameters.BACK_TOKEN}",
-        }
-        resp = requests.post(url, json=payload, timeout=timeout, headers=headers)
+        payload = dict(
+                    email = parameters.BACK_ETL_USUARIO,
+                    password = parameters.BACK_ETL_SENHA,
+                )
+        url = f"{parameters.BACK_BASE_URL}/login"
+        resp = requests.post(url, json=payload, timeout=parameters.REQUEST_TIMEOUT)
         resp.raise_for_status()
         data = resp.json()
-        if expect_id and data.get('id') is None:
-            logger.error("Resposta do endpoint %s não contém 'id'. Resposta: %s", url, data)
-            return None
+
+        parameters.BACK_TOKEN = data['token']
         return data
     except RequestException as exc:
         detalhe = getattr(exc, 'response', None)
