@@ -1,4 +1,5 @@
 from src.config import parameters
+from src.config.conexao_back import gerar_token
 from src.utils.inserir_periodo_coringa import inserir_periodo_coringa
 from src.utils.exclusao_dados import exclusao_dados
 from src.extract import extract_projetos
@@ -31,6 +32,7 @@ def main():
     print(f'JIRA_PASSWORD: {parameters.JIRA_PASSWORD}')
     print(f'BACK_BASE_URL: {parameters.BACK_BASE_URL}')
 
+    gerar_token()
     exclusao_dados()
     inserir_periodo_coringa()
 
